@@ -1,28 +1,17 @@
-name: Phoenix Swarm
+name: Final Hope
 
 on:
   workflow_dispatch:
 
 jobs:
-  read-targets:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.generate-matrix.outputs.matrix }}
-    steps:
-      - uses: actions/checkout@v3
-      - id: generate-matrix
-        run: |
-          TARGETS_JSON=$(jq -R -s 'split("\n") | map(select(length > 0))' < targets.txt)
-          echo "matrix={\"target\":${TARGETS_JSON}}" >> $GITHUB_OUTPUT
-
   strike:
-    needs: read-targets
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.read-targets.outputs.matrix) }}
+      matrix:
+        target: [ "google.com", "facebook.com", "tesla.com" ] # ئامانجەکان لێرە بنووسە
     steps:
       - name: Run Scan
         run: |
-          echo "Phoenix drone is striking: ${{ matrix.target }}"
+          echo "Final drone is striking: ${{ matrix.target }}"
           sleep 5
