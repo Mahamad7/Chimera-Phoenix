@@ -10,30 +10,30 @@ jobs:
       fail-fast: false
       matrix:
         target: [ "stripe.com", "braintreepayments.com", "square.com", "affirm.com", "klarna.com", "revolut.com", "coinbase.com", "binance.com", "kraken.com", "crypto.com", "metamask.io", "opensea.io", "chain.link", "ethereum.org", "bitcoin.org", "ripple.com", "litecoin.org", "dogecoin.com", "cardano.org", "polkadot.network", "solana.com", "algorand.com", "avalanche.network", "polygon.technology", "tezos.com", "cosmos.network", "near.org", "fantom.foundation", "harmony.one", "celo.org", "zilliqa.com", "vechain.org", "hedera.com", "stellar.org", "eos.io", "tron.network", "monero.org", "z.cash", "dash.org", "makerdao.com", "aave.com", "compound.finance", "uniswap.org", "sushi.com", "curve.fi", "yearn.finance", "balancer.fi", "1inch.io", "dydx.exchange", "synthetix.io", "nexusmutual.io", "thegraph.com", "decentraland.org", "sandbox.game", "axieinfinity.com", "godsunchained.com", "splinterlands.com", "alienworlds.io", "roblox.com", "epicgames.com", "unity.com", "unrealengine.com", "discord.com", "telegram.org", "signal.org", "whatsapp.com", "facebook.com", "instagram.com", "twitter.com", "linkedin.com", "snap.com", "tiktok.com", "pinterest.com", "reddit.com", "quora.com", "medium.com", "substack.com", "ghost.org", "wordpress.com", "wix.com", "squarespace.com", "shopify.com", "bigcommerce.com", "magento.com", "salesforce.com", "hubspot.com", "oracle.com", "sap.com", "microsoft.com", "apple.com", "google.com", "amazon.com", "netflix.com", "spotify.com", "airbnb.com", "uber.com", "lyft.com", "doordash.com", "grubhub.com", "instacart.com", "tesla.com", "ford.com", "gm.com", "toyota.com", "honda.com", "sony.com", "samsung.com", "lg.com", "panasonic.com", "intel.com", "amd.com", "nvidia.com", "qualcomm.com", "ibm.com", "cisco.com", "juniper.net", "hp.com", "dell.com", "lenovo.com", "asus.com", "acer.com", "atlassian.com", "slack.com", "zoom.us", "dropbox.com", "box.com", "github.com", "gitlab.com", "bitbucket.org", "cloudflare.com", "fastly.com", "akamai.com", "verisign.com", "godaddy.com", "namecheap.com", "vultr.com", "digitalocean.com", "linode.com", "heroku.com", "aws.amazon.com", "azure.microsoft.com", "cloud.google.com", "firebase.google.com", "mongodb.com", "redis.io", "postgresql.org", "mysql.com", "mariadb.org", "docker.com", "kubernetes.io", "redhat.com", "canonical.com", "ubuntu.com", "debian.org", "fedora.org", "archlinux.org", "gitlab.com", "jenkins.io", "travis-ci.org", "circleci.com", "bugcrowd.com", "hackerone.com", "intigriti.com", "synack.com", "cobalt.io", "yogosha.com", "zerocopter.com", "detectify.com", "sans.org", "owasp.org", "offensive-security.com", "portswigger.net", "rapid7.com", "tenable.com", "qualys.com", "crowdstrike.com", "fireeye.com", "paloaltonetworks.com", "fortinet.com", "checkpoint.com", "f5.com", "imperva.com", "barracuda.com", "proofpoint.com", "mimecast.com", "symantec.com", "mcafee.com", "kaspersky.com", "eset.com", "avast.com", "avg.com", "bitdefender.com", "norton.com", "malwarebytes.com", "sophos.com", "trendmicro.com", "zscaler.com", "netskope.com", "okta.com", "pingidentity.com", "duo.com", "onelogin.com", "auth0.com", "sailpoint.com", "cyberark.com", "beyondtrust.com", "thycotic.com", "verizon.com", "att.com", "t-mobile.com", "sprint.com", "comcast.com", "charter.com", "cox.com", "centurylink.com" ]
-    steps:
-      - name: Checkout Project Code
-        uses: actions/checkout@v4
+steps:
+  - name: Checkout Project Code
+    uses: actions/checkout@v4
 
-      - name: Install Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
+  - name: Install Go
+    uses: actions/setup-go@v5
+    with:
+      go-version: '1.21'
 
-      - name: Install Recon Tools
-        run: |
-          go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-          go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
-          go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
-          echo "$HOME/go/bin" >> $GITHUB_PATH
+  - name: Install Recon Tools
+    run: |
+      go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+      go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+      go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+      echo "$HOME/go/bin" >> $GITHUB_PATH
 
-      - name: Run Real Recon Drone
-        run: |
-          chmod +x run_drone.sh
-          ./run_drone.sh ${{ matrix.target }} ${{ secrets.GH_TOKEN }}
+  - name: Run Real Recon Drone
+    run: |
+      chmod +x run_drone.sh
+      ./run_drone.sh ${{ matrix.target }}
 
-      - name: Upload Recon Results
-        if: always( )
-        uses: actions/upload-artifact@v4
-        with:
-          name: recon-results-${{ matrix.target }}
-          path: recon_results/
+  - name: Upload Recon Results
+    if: always( )
+    uses: actions/upload-artifact@v4
+    with:
+      name: recon-results-${{ matrix.target }}
+      path: recon_results/
