@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# $1 is the target domain, $2 is the GitHub token
+# $1 is the target domain
 TARGET=$1
-TOKEN=$2
 DATE=$(date +%Y-%m-%d)
 RESULTS_DIR="recon_results/${TARGET}_${DATE}"
 
@@ -25,7 +24,8 @@ echo "[+] httpx finished. Results saved to ${RESULTS_DIR}/live_hosts.txt"
 
 # --- Step 3: Vulnerability Scanning with nuclei ---
 echo "[*] Running nuclei for vulnerabilities..."
-nuclei -l "${RESULTS_DIR}/live_hosts.txt" -t "technologies,cves,misconfiguration,vulnerabilities" -o "${RESULTS_DIR}/nuclei_findings.txt"
+# The -as flag automatically scans for all relevant templates
+nuclei -l "${RESULTS_DIR}/live_hosts.txt" -as -o "${RESULTS_DIR}/nuclei_findings.txt"
 echo "[+] Nuclei finished. Results saved to ${RESULTS_DIR}/nuclei_findings.txt"
 
 echo "=================================================="
