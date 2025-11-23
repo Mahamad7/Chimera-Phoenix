@@ -24,7 +24,7 @@ echo "[+] httpx finished. Results saved to ${RESULTS_DIR}/live_hosts.txt"
 
 # --- Step 3: Vulnerability Scanning with nuclei ---
 echo "[*] Running nuclei for vulnerabilities..."
-# The -as flag automatically scans for all relevant templates
+# Using auto-scan (-as ) to let nuclei pick the best templates
 nuclei -l "${RESULTS_DIR}/live_hosts.txt" -as -o "${RESULTS_DIR}/nuclei_findings.txt"
 echo "[+] Nuclei finished. Results saved to ${RESULTS_DIR}/nuclei_findings.txt"
 
